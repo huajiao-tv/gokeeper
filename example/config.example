@@ -1,0 +1,19 @@
+admin_listen = :17000 ;监听后台操作的端口号（http），用于修改配置等
+prom_listen = :17001
+
+gorpc_listen = :7000  ;client、agent等使用的端口号（tcp），gorpc server监听的端口号，用于node节点拉取配置等
+grpc_listen = :7001
+
+event_interval = 60
+
+base_path = ./
+test_mode = true  ;是否是测试环境，如果不配置，则该值默认为false；测试环境接口不进行guid校验
+
+storage_url = http://:2379 ;etcd集群地址
+storage_username =  ;etcd 用户名
+storage_password =  ;etcd 密码
+event_mode = version       ;支持监听conf和version的方式，默认为version的方式
+
+registry_url = http://:2379 ;etcd registry 集群
+registry_username = ;etcd 用户名 
+registry_password = ;etcd 密码 
