@@ -70,22 +70,20 @@ sleep_time time.Duration= 30s
 
 
 json：配置格式： 变量名 变量类型 json = json字符串 
-例如想配置 type Person struct 结构体的json的数据，可以如下配置
+例如想配置 type PkPerson struct 结构体的json的数据，可以如下配置
 
-pk_person Person json = {"name":"zhangsan","age":20,"cr":{"score":{"english":88,"math":99},"id":2011}}
-可生成go代码：
-GkPerson Person
-然后， 需要在 data 文件夹下添加 Person的结构声明，例如添加 struct.go 文件，里边声明Person 
-package data
+pk_person json = {"name":"zhangsan","age":20,"cr":{"score":{"english":88,"math":99},"id":2011}}
+在conf文件中配置此字段后可由gokeeper-cli生成go结构体代码：
 
-type Course struct {
-    Score map[string]uint64 `json:"score"`
-    Id    uint64            `json:"id"`
-}
-
-type Person struct {
-    Name string `json:"name"`
-    Age  uint64 `json:"age"`
-    Cr   Course `json:"cr"`
+type PkPerson struct {
+	Age int64 `json:"age"`
+	Cr  struct {
+		ID    int64 `json:"id"`
+		Score struct {
+			English float64 `json:"english"`
+			Math    int64   `json:"math"`
+		} `json:"score"`
+	} `json:"cr"`
+	Name string `json:"name"`
 }
 ```

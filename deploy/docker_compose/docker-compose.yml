@@ -22,3 +22,13 @@ services:
       - '17001:17001'
     depends_on:
       - gokeeper_etcd
+  gokeeper_dashboard:
+    container_name: gokeeper_dashboard
+    build:
+      context: ../../dashboard/
+      dockerfile: ./Dockerfile
+    ports:
+      - '8000:80'
+    environment:
+      KEEPER: "gokeeper_main:17000"
+
