@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/signal"
+	"reflect"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -440,6 +441,7 @@ func (client *Client) GetServiceAddr(serviceName, schema string) (string, error)
 	if !ok {
 		return "", ErrNoScheduler
 	}
+	fmt.Println(reflect.TypeOf(scheduler))
 	instance, err := scheduler.Select()
 	if err != nil {
 		return "", err

@@ -28,7 +28,7 @@ func (s *ServiceController) DiscoveryGetServiceAction() {
 
 //获取服务列表
 func (s *ServiceController) DiscoveryListServicesAction() {
-	services, err := discovery.ListServices()
+	services, err := discovery.GetServiceNames()
 	if err != nil {
 		logger.Logex.Error("DiscoveryListServices", "ListServices", err.Error())
 		s.renderJSON(Resp{ErrorCode: 1, Error: fmt.Sprintf("ListServices error:%s", err.Error())})

@@ -286,7 +286,6 @@ func (book *ServiceBook) updateProperty(property *dm.Property, version int64) er
 func (book *ServiceBook) GetUpgradedServices(serviceVersions map[string]int64, reconnect bool) map[string]*dm.Service {
 	book.RLock()
 	defer book.RUnlock()
-
 	upgradedServices := map[string]*dm.Service{}
 	for serviceName, version := range serviceVersions {
 		service, ok := book.services[serviceName]

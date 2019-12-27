@@ -57,7 +57,7 @@
                     <v-text-field v-model="editedItem.key" :readonly="!editable" :rules="emptyRules" label="Key" required/>
                   </v-flex>
                   <v-flex xs12 sm6>
-                    <v-select v-model="editedItem.type" :items="keyTypes" :readonly="!editable" :rules="emptyRules" label="Type" required/>
+                    <v-select  v-model="editedItem.type" :items="keyTypes" :readonly="!editable" :rules="emptyRules" label="Type" required/>
                   </v-flex>
                   <v-flex xs12>
                     <v-textarea v-model="editedItem.value" :readonly="!editable" label="Value"/>
@@ -157,6 +157,7 @@
 
 <script>
 import axios from 'axios'
+import {getErrorMessage,successNotify,errorNotify} from "@/tools/req"
 
 export default {
   data: () => ({
@@ -246,6 +247,8 @@ export default {
           }
           this.getConfig(cluster)
         }
+      }).catch(res =>{
+        errorNotify(getErrorMessage(res),this)
       })
     },
 
@@ -263,7 +266,7 @@ export default {
                 file: file.name,
                 section: section.name,
                 key: section.keys[name].key,
-                type: section.keys[name].type,
+                type:section.keys[name].is_json?'json':section.keys[name].type,
                 value: section.keys[name].raw_value
               })
             })
@@ -272,6 +275,8 @@ export default {
         this.currentCluster = cluster
         localStorage.cluster = cluster
         this.loading = false
+      }).catch(res =>{
+        errorNotify(getErrorMessage(res),this)
       })
     },
 
@@ -304,13 +309,17 @@ export default {
       for (let file of this.newDomain.files) {
         formData.append("files", file, file.name)
       }
-      axios.put('/keeper/'+this.newDomain.keeper+'/'+this.newDomain.name, formData).then(res => {
-        if (res.data.code !== 0) {
-          console.log('add new domain failed', res.data)
-          return
+      axios.put('/keeper/'+this.newDomain.name, formData).then(res =>{
+          if (res.data.code !==0){
+            successNotify(res.data.error,this)
+          }else {
+            successNotify("添加成功",this)
+            this.initialize()
+            this.close()
+          }
         }
-        this.initialize()
-        this.close('domain')
+      ).catch(res => {
+        errorNotify(getErrorMessage(res),this)
       })
     },
 
@@ -320,13 +329,17 @@ export default {
       }
       this.editedItem.opcode = this.editedIndex === -1 ? 'add' : 'update'
       this.editedItem.domain = this.currentCluster
-      axios.post('/config/' + this.currentCluster, this.editedItem).then(res => {
-        if (res.data.code !== 0) {
-          console.log('update config failed', res.data)
-          return
+      axios.post('/config/' + this.currentCluster, this.editedItem).then(res =>{
+          if (res.data.code !==0){
+            successNotify(res.data.error,this)
+          }else {
+            successNotify("添加成功",this)
+            this.initialize()
+            this.close()
+          }
         }
-        this.initialize()
-        this.close()
+      ).catch(res => {
+        errorNotify(getErrorMessage(res),this)
       })
     }
   }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/huajiao-tv/gokeeper/dashboard/api/models"
+	km "github.com/huajiao-tv/gokeeper/model"
 )
 
 func getDomainConfig(c *gin.Context) {
@@ -18,12 +19,12 @@ func getDomainConfig(c *gin.Context) {
 }
 
 func updateDomainConfig(c *gin.Context) {
-	op := &models.ConfigOperate{}
+	op := &km.Operate{}
 	if err := c.BindJSON(&op); err != nil {
 		c.JSON(http.StatusBadRequest, Error(err))
 		return
 	}
-	if err := models.KeeperAdminClient.ManageConfig(op.Cluster, []*models.ConfigOperate{op}, op.Comment); err != nil {
+	if err := models.KeeperAdminClient.ManageConfig(op.Domain, []*km.Operate{op}, op.Note); err != nil {
 		c.JSON(http.StatusInternalServerError, Error(err))
 		return
 	}

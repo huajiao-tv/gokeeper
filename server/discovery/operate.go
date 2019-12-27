@@ -3,6 +3,8 @@ package discovery
 import (
 	"time"
 
+	"google.golang.org/grpc/status"
+
 	dm "github.com/huajiao-tv/gokeeper/model/discovery"
 	pb "github.com/huajiao-tv/gokeeper/pb/go"
 	"github.com/huajiao-tv/gokeeper/server/discovery/registry"
@@ -74,9 +76,16 @@ func GetService(serviceName string) (*dm.Service, error) {
 	return registryServiceBook.registry.GetService(serviceName)
 }
 
-//获取服务列表
-func ListServices() ([]*dm.Service, error) {
-	return registryServiceBook.registry.ListServices()
+//获取服务名列表
+func GetServiceNames() ([]string, error) {
+	if !pollsWorking {
+		return nil, status.Errorf(ErrCodeInternal, "server is restarting")
+	}
+	serviceNames := make([]string, 0, len(registryServiceBook.services))
+	for name, _ := range registryServiceBook.services {
+		serviceNames = append(serviceNames, name)
+	}
+	return serviceNames, nil
 }
 
 //设置属性

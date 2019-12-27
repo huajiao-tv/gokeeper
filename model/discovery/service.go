@@ -46,6 +46,7 @@ type Instance struct {
 	Addrs map[string]string `json:"addrs"`
 	//元组数据，例如weight权重信息
 	Metadata MD `json:"metadata"`
+	//节点状态
 
 	//注册时间
 	RegTime int64 `json:"reg_time"`

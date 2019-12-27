@@ -23,6 +23,7 @@ func addDomain(c *gin.Context) {
 	for _, d := range domains {
 		if d.Name == domain {
 			c.JSON(http.StatusBadRequest, BadRequest("domain already exists"))
+
 			return
 		}
 	}

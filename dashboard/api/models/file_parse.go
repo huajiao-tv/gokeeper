@@ -5,16 +5,17 @@ import (
 	"fmt"
 	"strings"
 
+	km "github.com/huajiao-tv/gokeeper/model"
 	"github.com/qmessenger/utility/go-ini/ini"
 )
 
-func ParseConfigFile(domain, file, content string) ([]*ConfigOperate, error) {
+func ParseConfigFile(domain, file, content string) ([]*km.Operate, error) {
 	cfg, err := ini.Load([]byte(content))
 	if err != nil {
 		return nil, err
 	}
 
-	var cfgOps []*ConfigOperate
+	var cfgOps []*km.Operate
 	for _, section := range cfg.Sections() {
 		for _, key := range section.Keys() {
 			parts := strings.SplitN(key.Name(), " ", 2)
@@ -32,15 +33,15 @@ func ParseConfigFile(domain, file, content string) ([]*ConfigOperate, error) {
 
 			}
 
-			cfgOps = append(cfgOps, &ConfigOperate{
-				Action:  AddConfig,
-				Cluster: domain,
+			cfgOps = append(cfgOps, &km.Operate{
+				Opcode:  AddConfig,
+				Domain:  domain,
 				File:    file,
 				Section: section.Name(),
 				Key:     name,
 				Type:    typ,
 				Value:   key.Value(),
-				Comment: "batch add",
+				Note:    "batch add",
 			})
 		}
 	}

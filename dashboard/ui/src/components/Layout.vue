@@ -46,7 +46,8 @@ export default {
     return {
       drawer: null,
       items: [
-        { icon: 'mdi-tune', title: 'Domain Settings', path: 'config' },
+        { icon: 'mdi-tune', title: 'config manage', path: 'config' },
+        { icon: 'mdi-wifi', title: 'service discovery', path: 'service' },
       ]
     }
   },

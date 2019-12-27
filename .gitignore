@@ -1,3 +1,6 @@
 .DS_Store
 .idea/
 gokeeper
+dashboard/ui/node_modules/
+dashboard/ui/package_lock.json
+dashboard/api/api

@@ -109,6 +109,7 @@ func (t TestServiceBook) GetUpgradedServices(serviceVersions map[string]int64, r
 func (t TestServiceBook) FindInstance(serviceName, zone, id string) (*dm.Instance, error) {
 	return nil, nil
 }
+
 func (t TestServiceBook) Watch() {
 
 }

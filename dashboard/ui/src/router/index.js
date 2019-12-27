@@ -21,6 +21,16 @@ export default new Router({
         component: () => import('../views/Config')
       }]
     },
+    {
+      path: '/service',
+      component: Layout,
+      children: [{
+        name: 'service',
+        path: '',
+        component: () => import('../views/Service')
+      }]
+    },
+
     /*{
       path: '/keeper',
       component: Layout,
