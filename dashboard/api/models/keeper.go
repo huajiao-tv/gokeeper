@@ -163,10 +163,7 @@ func (c *Client) request(path string, form url.Values, post bool, data interface
 	} else {
 		uri := fmt.Sprintf("http://%s%s?%s", c.keeper, path, form.Encode())
 		resp, err = c.httpClient.Get(uri)
-		fmt.Println(uri, resp)
 	}
-	j, _ := json.Marshal(resp.Body)
-	fmt.Println("dddd", string(j))
 	if err != nil {
 		return err
 	}
@@ -178,7 +175,6 @@ func (c *Client) request(path string, form url.Values, post bool, data interface
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(body))
 	if err = json.Unmarshal(body, data); err != nil {
 		return err
 	}

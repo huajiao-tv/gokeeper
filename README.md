@@ -27,5 +27,7 @@ cd deploy/docker-compose && docker-compose up -d
 
 - [instruction for service discovery](docs/service_instruction.md)
 
+## [Browse Backend](http://127.0.0.1:8000)
 
+- the backend shows domain configs have been configured and service have been  registered,so that you can browse it to test and verify
 
