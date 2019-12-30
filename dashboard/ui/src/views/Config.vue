@@ -237,9 +237,11 @@ export default {
     initialize() {
       axios.get('/keeper/domains').then(res => {
         this.clusters = []
-        res.data.data.forEach(item => {
-          this.clusters.push(item.domain)
-        })
+        if (res.data.data !== null) {
+          res.data.data.forEach(item => {
+            this.clusters.push(item.domain)
+          })
+        }
         if (this.clusters.length > 0) {
           var cluster = this.clusters[0]
           if (localStorage.cluster) {
@@ -258,20 +260,22 @@ export default {
       this.desserts = []
       axios.get('/config/' + cluster).then(res => {
         this.files = []
-        res.data.data.forEach(file => {
-          this.files.push(file.name)
-          file.sections.forEach(section => {
-            Object.keys(section.keys).forEach(name => {
-              this.desserts.push({
-                file: file.name,
-                section: section.name,
-                key: section.keys[name].key,
-                type:section.keys[name].is_json?'json':section.keys[name].type,
-                value: section.keys[name].raw_value
+        if (res.data.data !== null) {
+          res.data.data.forEach(file => {
+            this.files.push(file.name)
+            file.sections.forEach(section => {
+              Object.keys(section.keys).forEach(name => {
+                this.desserts.push({
+                  file: file.name,
+                  section: section.name,
+                  key: section.keys[name].key,
+                  type: section.keys[name].is_json ? 'json' : section.keys[name].type,
+                  value: section.keys[name].raw_value
+                })
               })
             })
           })
-        })
+        }
         this.currentCluster = cluster
         localStorage.cluster = cluster
         this.loading = false
