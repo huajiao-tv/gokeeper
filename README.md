@@ -1,8 +1,9 @@
 <p align="center">
     <a href="https://hub.docker.com/r/huajiao/gokeeper" alt="Activity">
-        <img src="https://img.shields.io/docker/automated/huajiao/gokeeper?style=social" /></a>
+        <img src="https://img.shields.io/docker/cloud/automated/huajiao/gokeeper.svg" /></a>
     <a href="https://hub.docker.com/r/huajiao/gokeeper" alt="Activity">
-        <img src="https://img.shields.io/docker/build/huajiao/gokeeper?style=social" /></a>
+        <img src="https://img.shields.io/docker/cloud/build/huajiao/gokeeper.svg" /></a>
+    <img src="https://img.shields.io/github/license/huajiao-tv/gokeeper.svg" />
 </p>
 
 # gokeeper
