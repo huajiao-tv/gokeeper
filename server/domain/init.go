@@ -20,7 +20,7 @@ func Init() {
 	if defaultDomain == "" {
 		return
 	}
-	if _, err := DomainBooks.GetDomain(defaultDomain); err != nil {
+	if _, err := DomainBooks.GetDomain(defaultDomain); err == nil {
 		return
 	}
 	// Add domain
