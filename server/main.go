@@ -59,5 +59,8 @@ func Main() {
 
 	go sync.Watch()
 
+	// Init domain conf
+	Kdomain.Init()
+
 	fmt.Printf("start finish")
 }
