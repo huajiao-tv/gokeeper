@@ -4,13 +4,16 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"reflect"
 	"sync"
 	"time"
 )
 
 func init() {
-	gob.Register(NodeInfo{})
-	gob.Register(Node{})
+	n1 := NodeInfo{}
+	gob.RegisterName(reflect.TypeOf(n1).String(), n1)
+	n2 := Node{}
+	gob.RegisterName(reflect.TypeOf(n2).String(), n2)
 }
 
 type NodeStatus int
