@@ -9,8 +9,19 @@
 - **key**:a config key matches a config value
 - **gokeeper-cli**: use to create golang struct from conf file（[conf file example](../example/keeper/data/config/mydomain/test.conf)、[conf file rules](conf_file_rules.md)）
 
-### start with example
 
+### create config in gokeeper server
+There are three ways:
+- use the admin api:
+```
+curl "127.0.0.1:17000/add/file?domain=testDomain&file=testFile.conf&conf=test_key%20string%20%3D%20test_value&note=test"
+```
+  (needs urlEncode)
+- init default server:
+   Gokeeper server will init domains in the directory "/tmp/gokeeper/init/"(if you use docker-compose to start,it have init the domain "mydomain")
+- use dashboard backend to add config:
+   The dashboard have been started if you start gokeeper with docker-compose,default address:http://127.0.0.1:8000.
+### use config in project:
 #### Installation
 
 ```shell
@@ -38,7 +49,7 @@ import (
 
 ...
 
-//your sections to use
+//your file and sections to use
 sections := []string{"test.conf/DEFAULT"}  
 
 //gokeeper.WithGrpc() will use grpc to connect gokeeper server,otherwise use gorpc

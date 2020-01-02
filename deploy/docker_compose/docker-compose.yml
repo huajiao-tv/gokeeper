@@ -22,6 +22,8 @@ services:
       - '17001:17001'
     depends_on:
       - gokeeper_etcd
+    volumes:
+      - '../../example/keeper/data/config:/tmp/gokeeper/init'
   gokeeper_dashboard:
     container_name: gokeeper_dashboard
     build:
