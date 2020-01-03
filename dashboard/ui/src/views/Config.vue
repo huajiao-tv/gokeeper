@@ -70,7 +70,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer/>
-              <v-btn color="red darken-1" text @click.native="close">Cancel</v-btn>
+              <v-btn color="red darken-1" text @click.native="close('item')">Cancel</v-btn>
               <v-btn v-if="editable" color="blue darken-1" text @click.native="save">Save</v-btn>
             </v-card-actions>
           </v-card>
@@ -115,7 +115,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn color="red darken-1" text @click="close()">Cancel</v-btn>
+              <v-btn color="red darken-1" text @click="close('domain')">Cancel</v-btn>
               <v-btn color="blue darken-1" text @click="saveDomain">Save</v-btn>
             </v-card-actions>
           </v-form>
@@ -297,12 +297,16 @@ export default {
       this.editable = false
     },
 
-    close() {
-      this.editable = true
-      this.dialog.domain = false
-      this.dialog.item = false
-      this.editedIndex = -1
-      this.$refs.form.reset()
+    close(i) {
+      if (i === "item") {
+        this.editable = true
+        this.dialog.item = false
+        this.editedIndex = -1
+        this.$refs.form.reset()
+      }else if (i==="domain") {
+        this.dialog.domain = false
+        this.$refs.domainForm.reset()
+      }
     },
 
     saveDomain() {
@@ -315,11 +319,11 @@ export default {
       }
       axios.put('/keeper/'+this.newDomain.name, formData).then(res =>{
           if (res.data.code !==0){
-            successNotify(res.data.error,this)
+            errorNotify(res.data.error,this)
           }else {
             successNotify("添加成功",this)
             this.initialize()
-            this.close()
+            this.close("domain")
           }
         }
       ).catch(res => {
@@ -335,11 +339,11 @@ export default {
       this.editedItem.domain = this.currentCluster
       axios.post('/config/' + this.currentCluster, this.editedItem).then(res =>{
           if (res.data.code !==0){
-            successNotify(res.data.error,this)
+            errorNotify(res.data.error,this)
           }else {
             successNotify("添加成功",this)
             this.initialize()
-            this.close()
+            this.close("item")
           }
         }
       ).catch(res => {

@@ -19,7 +19,7 @@ curl "127.0.0.1:17000/add/file?domain=testDomain&file=testFile.conf&conf=test_ke
   (needs urlEncode)
 - init default server:
    Gokeeper server will init domains in the directory "/tmp/gokeeper/init/"(if you use docker-compose to start,it have init the domain "mydomain")
-- use dashboard backend to add config:
+- use dashboard backend:
    The dashboard have been started if you start gokeeper with docker-compose,default address:http://127.0.0.1:8000.
 ### use config in project:
 #### Installation
@@ -77,3 +77,11 @@ timeout := data.CurrentTest().Timeout
 
 ...
 ```
+
+#### update config
+There are two ways:
+- use admin api:
+```
+curl http://127.0.0.1:17000/conf/manage?domain=mydomain&note=test&operates=[{"opcode":"update","file":"test.conf","key":"timeout","raw_value":"60","section":"","type":""}]
+```
+- use dashboard backend

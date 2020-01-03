@@ -141,6 +141,24 @@ func (c *Client) ManageConfig(cluster string, ops []*km.Operate, note string) er
 	}
 }
 
+func (c *Client) AddFile(cluster string, file string, confData string, note string) error {
+	resp := &BaseResponse{}
+	args := url.Values{
+		"domain": []string{cluster},
+		"file":   []string{file},
+		"conf":   []string{confData},
+		"note":   []string{note},
+	}
+	if err := c.request("/add/file", args, false, resp); err != nil {
+		return err
+	} else {
+		if resp.Code != 0 {
+			return errors.New(resp.Message)
+		}
+		return nil
+	}
+}
+
 //
 func (c *Client) QueryHistory() error {
 	path := "/package/list"

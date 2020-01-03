@@ -303,6 +303,9 @@ func (f *File) parse(reader io.Reader) (err error) {
 		if err != nil {
 			return err
 		}
+		if k := strings.Split(kname, " "); len(k) == 2 && k[1] == "map[string][]string" {
+			value += p.comment.String()
+		}
 		key.SetValue(value)
 		key.Comment = strings.TrimSpace(p.comment.String())
 		p.comment.Reset()

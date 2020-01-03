@@ -385,6 +385,102 @@ func ParseFileConf(conf string) (*File, error) {
 	return file, nil
 }
 
+/*func ParseFile(conf string) (_ *File, err error) {
+	sources := strings.NewReader(conf)
+	f := &File{}
+	if err = f.parse(sources); err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
+// parse parses data through an io.Reader.
+func (f *File) parse(reader io.Reader) (err error) {
+
+	if err = p.BOM(); err != nil {
+		return fmt.Errorf("BOM: %v", err)
+	}
+
+	// Ignore error because default section name is never empty string.
+	section, _ := f.NewSection(DEFAULT_SECTION)
+
+	var line []byte
+	for !p.isEOF {
+		line, err = p.readUntil('\n')
+		if err != nil {
+			return err
+		}
+
+		line = bytes.TrimLeftFunc(line, unicode.IsSpace)
+		if len(line) == 0 {
+			continue
+		}
+
+		// Comments
+		if line[0] == '#' || line[0] == ';' {
+			// Note: we do not care ending line break,
+			// it is needed for adding second line,
+			// so just clean it once at the end when set to value.
+			p.comment.Write(line)
+			continue
+		}
+
+		// Section
+		if line[0] == '[' {
+			// Read to the next ']' (TODO: support quoted strings)
+			closeIdx := bytes.IndexByte(line, ']')
+			if closeIdx == -1 {
+				return fmt.Errorf("unclosed section: %s", line)
+			}
+
+			section, err = f.NewSection(string(line[1:closeIdx]))
+			if err != nil {
+				return err
+			}
+
+			comment, has := cleanComment(line[closeIdx+1:])
+			if has {
+				p.comment.Write(comment)
+			}
+
+			section.Comment = strings.TrimSpace(p.comment.String())
+
+			// Reset aotu-counter and comments
+			p.comment.Reset()
+			p.count = 1
+			continue
+		}
+
+		kname, offset, err := readKeyName(line)
+		if err != nil {
+			return err
+		}
+
+		// Auto increment.
+		isAutoIncr := false
+		if kname == "-" {
+			isAutoIncr = true
+			kname = "#" + strconv.Itoa(p.count)
+			p.count++
+		}
+
+		key, err := section.NewKey(kname, "")
+		if err != nil {
+			return err
+		}
+		key.isAutoIncr = isAutoIncr
+
+		value, err := p.readValue(line[offset:])
+		if err != nil {
+			return err
+		}
+		key.SetValue(value)
+		key.Comment = strings.TrimSpace(p.comment.String())
+		p.comment.Reset()
+	}
+	return nil
+}*/
+
 // IgnoreFile .
 // 忽略以.开头的文件和目录
 // 忽略后缀不为 ConfSuffix 的文件

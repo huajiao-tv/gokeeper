@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"bytes"
-	"io"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,35 +26,27 @@ func addDomain(c *gin.Context) {
 			return
 		}
 	}
-	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, MaxSize)
-	r, err := c.Request.MultipartReader()
+
+	file, fileHeader, err := c.Request.FormFile("files")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, Error(err))
+		c.JSON(http.StatusBadRequest, BadRequest("read file failed:"+err.Error()))
 		return
 	}
-
-	for {
-		part, err := r.NextPart()
-		if err == io.EOF {
-			break
-		}
-		buf := bytes.Buffer{}
-		if _, err = buf.ReadFrom(part); err != nil {
-			c.JSON(http.StatusInternalServerError, Error(err))
-			return
-		}
-		ops, err := models.ParseConfigFile(domain, part.FileName(), buf.String())
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, Error(err))
-			return
-		}
-		if err := models.KeeperAdminClient.ManageConfig(domain, ops, "create domain with files"); err != nil {
-			c.JSON(http.StatusInternalServerError, Error(err))
-			return
-		}
+	if file == nil || fileHeader == nil {
+		c.JSON(http.StatusBadRequest, BadRequest("read file empty"))
+		return
 	}
-
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, BadRequest("read file failed:"+err.Error()))
+	}
+	fileName := fileHeader.Filename
+	if err := models.KeeperAdminClient.AddFile(domain, fileName, string(data), "add domain"); err != nil {
+		c.JSON(http.StatusBadRequest, BadRequest("add file failed:"+err.Error()))
+		return
+	}
 	c.JSON(http.StatusOK, NewResponse(""))
+	return
 }
 
 func getDomains(c *gin.Context) {
