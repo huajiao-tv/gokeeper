@@ -307,8 +307,8 @@ func (client *Client) register() error {
 }
 
 //解除服务注册
-func (client *Client) deregister() error {
-	//如果instance为nil，则不进行注册
+func (client *Client) Deregister() error {
+	//如果instance为nil，则不进行解注册
 	if client.option.instance == nil {
 		return nil
 	}
@@ -322,7 +322,7 @@ func (client *Client) deregister() error {
 	defer cancel()
 	_, err := client.discoveryClient.Deregister(ctx, req)
 	if err != nil {
-		Stderr.Write([]byte(fmt.Sprintf("%s|discovery|client|deregister|code:%d msg:%s \n", time.Now().String(), status.Code(err), err.Error())))
+		Stderr.Write([]byte(fmt.Sprintf("%s|discovery|client|Deregister|code:%d msg:%s \n", time.Now().String(), status.Code(err), err.Error())))
 	}
 	return nil
 }
@@ -469,7 +469,7 @@ func (client *Client) SignalDeregister(exit bool, signals ...os.Signal) {
 		for {
 			sig := <-ch
 			Stdout.Write([]byte(fmt.Sprintf("%s|discovery|client|SignalDeregister|receive signal:%s,try to degrester\n", time.Now().String(), sig)))
-			err := client.deregister()
+			err := client.Deregister()
 			if err != nil {
 				Stderr.Write([]byte(fmt.Sprintf("%s|discovery|client|SignalDeregister|degrester error:%s\n", time.Now().String(), err.Error())))
 			} else {

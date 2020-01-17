@@ -122,7 +122,7 @@ func (book *ServiceBook) instanceEventProxy(eventType dr.WatchEventType, instanc
 	return err
 }
 
-//???为什么要穿version，容易导致问题,创建是否严格保证不能创建原有instance
+//TODO:为什么要传version，容易导致问题,创建是否严格保证不能创建原有instance
 
 //创建instance
 func (book *ServiceBook) createInstance(instance *dm.Instance, version int64) error {
@@ -282,7 +282,7 @@ func (book *ServiceBook) updateProperty(property *dm.Property, version int64) er
 }
 
 //根据版本号获取已更新的service，reconnect为true时，代表重新建立连接，此时推全量数据
-//???
+//TODO reconnect
 func (book *ServiceBook) GetUpgradedServices(serviceVersions map[string]int64, reconnect bool) map[string]*dm.Service {
 	book.RLock()
 	defer book.RUnlock()

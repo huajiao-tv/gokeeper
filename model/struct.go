@@ -91,7 +91,7 @@ func DecodeConfData(s string) (*ConfData, error) {
 	if err = json.Unmarshal([]byte(s), &cd); err != nil {
 		return nil, err
 	}
-	//@todo 有时间再优化一下改数据结构
+	//@todo 有时间再优化一下该数据结构
 	if cd.IsJson {
 		cd.Value = cd.RawValue
 	} else {

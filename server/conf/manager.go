@@ -216,7 +216,6 @@ func (c *ConfManager) Subscribe(subscriptions []string) []model.StructData {
 	for structName, cfdMap := range cfdMaps {
 		structDatas = append(structDatas, model.NewStructData(structName, 0, cfdMap))
 	}
-
 	return structDatas
 }
 

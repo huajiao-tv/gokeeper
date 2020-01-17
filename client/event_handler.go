@@ -34,7 +34,6 @@ func nodeConfigChanged(c *Client, evt model.Event) error {
 	if len(sdata) == 0 {
 		return nil
 	}
-
 	rdata := c.data
 	structs := map[string]interface{}{}
 

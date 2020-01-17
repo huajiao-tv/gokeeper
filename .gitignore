@@ -5,3 +5,4 @@ dashboard/ui/node_modules/
 dashboard/ui/package_lock.json
 dashboard/api/api
 go.sum
+debug/

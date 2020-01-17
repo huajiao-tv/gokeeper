@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/huajiao-tv/gokeeper/model/parser"
+
 	"github.com/huajiao-tv/gokeeper/model"
 )
 
@@ -43,7 +45,11 @@ func setStructField(itr interface{}, data map[string]model.ConfData) error {
 				Stderr.Write([]byte(fmt.Sprintf("%s|gokeeper|setStructField|field type invalid|%s|%s|%s \n", time.Now().String(), v.StructKey, typ, v.Type)))
 				continue
 			}
-			fieldValue = reflect.ValueOf(v.Value)
+			value, err := parser.TypeParserAux(v.Type, v.RawValue)
+			if err != nil {
+				Stderr.Write([]byte(fmt.Sprintf("%s|gokeeper|pauseRawValue|%s|%s|%s \n", time.Now().String(), v.StructKey, v.Type, v.RawValue)))
+			}
+			fieldValue = reflect.ValueOf(value)
 		}
 		field.Set(fieldValue)
 	}

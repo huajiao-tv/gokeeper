@@ -419,7 +419,7 @@ func (se *StorageEtcd) getDomainAux(domain string, etcdVersion int64) (map[strin
 	return data, nil
 }
 
-//???是否需要同时删除version
+//TODO:是否需要同时删除version
 func (se *StorageEtcd) DelDomain(domain string, note string) error {
 	se.Lock()
 	defer se.Unlock()
@@ -458,7 +458,7 @@ func (se *StorageEtcd) delDomainAux(domain string) (int64, error) {
 	return resp.Header.Revision, nil
 }
 
-//??? TODO
+//TODO
 func (se *StorageEtcd) SetCurrentVersion(domain string, version int64) error {
 	return nil
 }

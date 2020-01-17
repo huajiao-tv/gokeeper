@@ -90,7 +90,6 @@ func ParseEvent(pbEvent *pb.ConfigEvent) (*Event, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return &modelEvent, nil
 }
 
