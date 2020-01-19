@@ -32,7 +32,7 @@ go get -u github.com/huajiao-tv/gokeeper ...
 
 ```shell
 cd example/mycomponent
-mkdir data && ./../../cmd/gokeeper-cli/gokeeper-cli -i ./../keeper/data/config/mydomain
+./../../cmd/gokeeper-cli/gokeeper-cli -i ./../keeper/data/config/mydomain
 ```
 
 #### start gokeeper client
