@@ -27,23 +27,20 @@ func addDomain(c *gin.Context) {
 		}
 	}
 
-	file, fileHeader, err := c.Request.FormFile("files")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, BadRequest("read file failed:"+err.Error()))
-		return
-	}
-	if file == nil || fileHeader == nil {
-		c.JSON(http.StatusBadRequest, BadRequest("read file empty"))
-		return
-	}
-	data, err := ioutil.ReadAll(file)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, BadRequest("read file failed:"+err.Error()))
-	}
-	fileName := fileHeader.Filename
-	if err := models.KeeperAdminClient.AddFile(domain, fileName, string(data), "add domain"); err != nil {
-		c.JSON(http.StatusBadRequest, BadRequest("add file failed:"+err.Error()))
-		return
+	c.Request.ParseMultipartForm(32 << 20)
+	files := c.Request.MultipartForm.File["files"]
+	for _, f := range files {
+		file, err := f.Open()
+		data, err := ioutil.ReadAll(file)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, BadRequest("read file failed:"+err.Error()))
+		}
+		fileName := f.Filename
+		if err := models.KeeperAdminClient.AddFile(domain, fileName, string(data), "add domain"); err != nil {
+
+			c.JSON(http.StatusBadRequest, BadRequest("add file failed:"+err.Error()))
+			return
+		}
 	}
 	c.JSON(http.StatusOK, NewResponse(""))
 	return
