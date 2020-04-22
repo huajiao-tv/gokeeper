@@ -452,7 +452,7 @@ func (s *ServiceController) DeleteDomainAction() {
 		s.renderJSON(Resp{ErrorCode: 1, Error: err.Error()})
 		return
 	}
-
+	Kdomain.DomainBooks.DeleteDomain(qDomain)
 	s.renderJSON(Resp{})
 }
 
