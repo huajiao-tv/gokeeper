@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"encoding/json"
 	"fmt"
+	"reflect"
 
 	pb "github.com/huajiao-tv/gokeeper/pb/go"
 )
@@ -29,7 +30,8 @@ const (
 )
 
 func init() {
-	gob.Register(Event{})
+	e := Event{}
+	gob.RegisterName(reflect.TypeOf(e).String(), e)
 }
 
 // Event .
