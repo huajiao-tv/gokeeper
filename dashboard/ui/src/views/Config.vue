@@ -134,15 +134,16 @@
         :loading="loading"
         :items-per-page="-1"
         class="elevation-1"
+        style="width: 100%;"
       >
         <template v-slot:body="{ items }">
-          <tbody>
+          <tbody >
             <tr v-for="item in items" :key="item.file + item.section + item.key">
               <td>{{ item.file }}</td>
               <td>{{ item.section }}</td>
               <td>{{ item.key }}</td>
               <td>{{ item.type }}</td>
-              <td>{{ item.value }}</td>
+              <td style="width: 60%; word-break: break-word;">{{ item.value }}</td>
               <td>
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small @click="viewItem(item)">mdi-eye</v-icon>
