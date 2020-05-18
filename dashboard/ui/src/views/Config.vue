@@ -123,6 +123,50 @@
       </v-dialog>
 
 
+      <v-dialog v-model="dialog.file" persistent max-width="500px">
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" color="primary" text>Add File</v-btn>
+        </template>
+        <v-card>
+          <v-form ref="fileForm" v-model="valid" lazy-validation>
+            <v-card-title>
+              <span class="headline">Add File</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6>
+                    <v-text-field
+                            v-model="addFile.domain"
+                            :rules="emptyRules"
+                            label="Domain Name"
+                            required
+                    />
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-file-input
+                            v-model="addFile.files"
+                            :rules="emptyRules"
+                            accept=".conf"
+                            show-size
+                            counter
+                            multiple
+                            label="Config Files (*.conf)"
+                    />
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="red darken-1" text @click="close('file')">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="saveFile">Save</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-dialog>
+
+
 
     </v-toolbar>
 
@@ -164,7 +208,8 @@ export default {
   data: () => ({
     dialog: {
       item:false,
-      domain:false
+      domain:false,
+      file:false
     },
     search: '',
     loading: true,
@@ -184,6 +229,7 @@ export default {
     editedIndex: -1,
     editedItem: {},
     newDomain: {},
+    addFile:{},
     valid: true,
     emptyRules: [
       v => !!v || 'Field is required'
@@ -307,6 +353,9 @@ export default {
       }else if (i==="domain") {
         this.dialog.domain = false
         this.$refs.domainForm.reset()
+      }else if (i==="file") {
+        this.dialog.file = false
+        this.$refs.fileForm.reset()
       }
     },
 
@@ -327,6 +376,28 @@ export default {
             this.close("domain")
           }
         }
+      ).catch(res => {
+        errorNotify(getErrorMessage(res),this)
+      })
+    },
+
+    saveFile() {
+      if (!this.$refs.fileForm.validate()) {
+        return
+      }
+      let formData = new FormData();
+      for (let file of this.addFile.files) {
+        formData.append("files", file, file.name)
+      }
+      axios.put('/keeper/'+this.addFile.domain+"/addFile", formData).then(res =>{
+                if (res.data.code !==0){
+                  errorNotify(res.data.error,this)
+                }else {
+                  successNotify("添加成功",this)
+                  this.initialize()
+                  this.close("domain")
+                }
+              }
       ).catch(res => {
         errorNotify(getErrorMessage(res),this)
       })

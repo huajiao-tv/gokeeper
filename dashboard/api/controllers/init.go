@@ -12,6 +12,7 @@ func Init(r *gin.Engine) error {
 	{
 		keeperGroup.GET("/domains", getDomains)
 		keeperGroup.PUT("/:domain", addDomain)
+		keeperGroup.PUT("/:domain/addFile", addFile)
 	}
 
 	configGroup := r.Group("/config")
