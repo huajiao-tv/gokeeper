@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  gokeeper_etcd:
+    container_name: gokeeper_etcd
+    image: 'bitnami/etcd:latest'
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://127.0.0.1:2379
+    ports:
+      - '2379:2379'
+      - '2380:2380'
+  gokeeper_main:
+    container_name: gokeeper_main
+    build:
+      context: ../../
+      dockerfile: ./deploy/docker_compose/Dockerfile
+    ports:
+      - '7000:7000'
+      - '7001:7001'
+      - '17000:17000'
+      - '17001:17001'
+    depends_on:
+      - gokeeper_etcd
+    volumes:
+      - '../../example/keeper/data/config:/tmp/gokeeper/init'
+  gokeeper_dashboard:
+    container_name: gokeeper_dashboard
+    build:
+      context: ../../dashboard/
+      dockerfile: ./Dockerfile
+    ports:
+      - '8000:80'
+    environment:
+      KEEPER: "gokeeper_main:17000"
+

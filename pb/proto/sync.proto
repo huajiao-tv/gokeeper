@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package keeper;
+
+import "google/api/annotations.proto";
+
+option deprecated = true;
+option optimize_for = SPEED;
+option go_package = "pb";
+option objc_class_prefix = "CPB";
+option java_multiple_files = true;
+option java_package = "com.service.keeper";
+option java_outer_classname = "ConfigProto";
+
+//配置的事件类型
+enum ConfigEventType{
+    // type
+    _CONFIG_EVENT_TYPE_ = 0;
+    // 配置无改变事件,为了兼容以前的事件类型，none设置为负数
+    CONFIG_EVENT_NONE = -1;
+    // 配置同步事件
+    CONFIG_EVENT_SYNC = 1;
+    // 节点配置更改
+    CONFIG_EVENT_NODE_CONF_CHANGED = 2;
+    // 节点注册
+    CONFIG_EVENT_NODE_REGISTER = 3;
+    // 节点状态事件
+    CONFIG_EVENT_NODE_STATUS = 4;
+    // 节点运行资源事件
+    CONFIG_EVENT_NODE_PROC = 5;
+    // 节点退出事件
+    CONFIG_EVENT_NODE_EXIT = 6;
+    // 命令启动事件
+    CONFIG_EVENT_CMD_START = 7;
+    // 命令停止事件
+    CONFIG_EVENT_CMD_STOP = 8;
+    // 命令重启事件
+    CONFIG_EVENT_CMD_RESTART = 9;
+    // 配置操作事件
+    CONFIG_EVENT_OPERATE = 10;
+    // 配置批量操作事件
+    CONFIG_EVENT_OPERATE_BATCH = 11;
+    // 配置回滚事件
+    CONFIG_OPERATE_ROLLBACK = 12;
+}
+
+//配置变动的接口体
+message ConfigEvent {
+    //请求的事件类型
+    ConfigEventType event_type = 1;
+    //数据信息,json格式
+    string data = 2;
+}
+
+//keeper 配置相关的接口
+service Sync {
+    //获取配置接口,如果请求的事件为CONFIG_EVENT_NONE且keeper中的配置没有发生改变，会阻塞n秒
+    rpc Sync (stream ConfigEvent) returns (stream ConfigEvent) {}
+}
